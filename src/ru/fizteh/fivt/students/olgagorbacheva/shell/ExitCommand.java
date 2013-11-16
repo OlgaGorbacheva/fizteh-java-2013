@@ -6,7 +6,6 @@ public class ExitCommand implements Command  {
       
       
       public void execute(String args[], State state) {
-            System.out.println("exit");
       }
       
       public String getName() {

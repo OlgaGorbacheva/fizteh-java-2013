@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Storage {
-      Map<String, String> storage;
+public class Storage<KeyType, ValueType> {
+      Map<KeyType, ValueType> storage;
       Boolean commited;
 
       public Storage() {
-            storage = new HashMap<String, String>();
+            storage = new HashMap<KeyType, ValueType>();
             commited = true;
       }
 
-      public boolean put(String key, String value) {
+      public boolean put(KeyType key, ValueType value) {
             if (storage.get(key) != null) {
                   return false;
             }
@@ -21,7 +21,7 @@ public class Storage {
             return true;
       }
 
-      public boolean set(String key, String value) {
+      public boolean set(KeyType key, ValueType value) {
             if (storage.get(key) == null) {
                   return false;
             }
@@ -29,7 +29,7 @@ public class Storage {
             return true;
       }
 
-      public boolean remove(String key) {
+      public boolean remove(KeyType key) {
             if (storage.get(key) == null) {
                   return false;
             }
@@ -37,18 +37,18 @@ public class Storage {
             return true;
       }
 
-      public String get(String key) {
+      public ValueType get(KeyType key) {
             if (storage.get(key) == null) {
                   return null;
             }
             return storage.get(key);
       }
 
-      public Map<String, String> getMap() {
+      public Map<KeyType, ValueType> getMap() {
             return storage;
       }
 
-      public Set<String> keySet() {
+      public Set<KeyType> keySet() {
             return storage.keySet();
       }
 
@@ -59,9 +59,5 @@ public class Storage {
       public void clear() {
             storage.clear();
       }
-
-      // public ... getKeys() {
-      // return storage.
-      // }
 
 }

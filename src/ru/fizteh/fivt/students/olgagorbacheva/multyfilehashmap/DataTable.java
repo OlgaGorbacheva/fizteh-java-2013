@@ -10,157 +10,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import ru.fizteh.fivt.storage.strings.Table;
 import ru.fizteh.fivt.students.olgagorbacheva.filemap.FileMapException;
-import ru.fizteh.fivt.students.olgagorbacheva.filemap.Storage;
 
-public class DataTable implements Table {
-
-      private String dataBaseName;
-      private Storage dataStorage;
-      private Storage newKeys;
-      private Storage removedKeys;
-      private File dataBaseDir;
+public class DataTable extends AbstractTable<String, String> implements Table{
 
       public DataTable(String name, File directory) {
-            dataBaseName = name;
-            dataBaseDir = directory;
-            dataStorage = new Storage();
-            newKeys = new Storage();
-            removedKeys = new Storage();
+            super(name, directory);
       }
-
-      public File getWorkingDirectory() {
-            return dataBaseDir;
-      }
-
-      public String getName() {
-            return dataBaseName;
-      }
-
-      public String get(String key) throws IllegalArgumentException {
-            if (key == null) {
-                  throw new IllegalArgumentException("Неверное значение ключа");
-            }
-            String value = newKeys.get(key);
-            if (value != null) {
-                  return value;
-            } else {
-                  String dataStorageValue = dataStorage.get(key);
-                  if (removedKeys.get(key) != null) {
-                        return null;
-                  } else {
-                        return dataStorageValue;
-                  }
-            }
-      }
-
-      public String put(String key, String value) {
-            if (key == null || value == null || key.trim().equals("") || value.trim().equals("")) {
-                  throw new IllegalArgumentException("Неверное значение ключа или значения");
-            }
-            if (dataStorage.get(key) == null && newKeys.get(key) == null || removedKeys.get(key) != null) {
-                  if (removedKeys.get(key) != null) {
-                        if (removedKeys.get(key) != value) {
-                              newKeys.put(key, value);
-                        }
-                        removedKeys.remove(key);
-                  } else {
-                        newKeys.put(key, value);
-                  }
-                  return null;
-            } else {
-                  if (newKeys.get(key) == null) {
-                        String oldValue = dataStorage.get(key);
-                        if (!oldValue.equals(value)) {
-                              newKeys.put(key, value);
-                        }
-                        return oldValue;
-                  }
-                  String oldValue = newKeys.get(key);
-                  newKeys.set(key, value);
-                  return oldValue;
-            }
-      }
-
-      public String remove(String key) {
-            if (key == null) {
-                  throw new IllegalArgumentException("Неверное значение ключа");
-            }
-            String value = newKeys.get(key);
-            if (value != null) {
-                  newKeys.remove(key);
-                  if (dataStorage.get(key) != null) {
-                        removedKeys.put(key, dataStorage.get(key));
-                  }
-                  return value;
-            } else {
-                  String valueFromDataStorage = dataStorage.get(key);
-                  if (valueFromDataStorage != null && removedKeys.get(key) == null) {
-                        removedKeys.put(key, valueFromDataStorage);
-                        return valueFromDataStorage;
-                  }
-                  return null;
-            }
-      }
-
-      public int size() {
-            int size = dataStorage.getSize() - removedKeys.getSize();
-            Set<String> keys = newKeys.keySet();
-            for (String key : keys) {
-                  if (dataStorage.get(key) == null) {
-                        size++;
-                  }
-            }
-            return size;
-      }
-
-      public int commit() {
-            int size = 0;
-            if (newKeys.getSize() != 0) {
-                  Set<String> keys = newKeys.keySet();
-                  for (String key : keys) {
-                        if (!newKeys.get(key).equals(dataStorage.get(key))) {
-                              size++;
-                        }
-                        if (!dataStorage.put(key, newKeys.get(key))) {
-                              dataStorage.set(key, newKeys.get(key));
-                        }
-                  }
-                  newKeys.clear();
-            }
-            if (removedKeys.getSize() != 0) {
-                  for (String key : removedKeys.keySet()) {
-                        size++;
-                        dataStorage.remove(key);
-                  }
-                  removedKeys.clear();
-            }
-            return size;
-      }
-
-      public int sizeChangesCommit() {
-            return removedKeys.getSize() + newKeys.getSize();
-      }
-
-      public int rollback() {
-            int size = 0;
-            if (newKeys.getSize() != 0) {
-                  Set<String> keys = newKeys.keySet();
-                  for (String key : keys) {
-                        if (!newKeys.get(key).equals(dataStorage.get(key))) {
-                              size++;
-                        }
-                  }
-            }
-            newKeys.clear();
-            size += removedKeys.getSize();
-            removedKeys.clear();
-            return size;
-      }
-
+      
       public void readFile() throws IOException {
             for (int i = 0; i < 16; i++) {
                   File currentDir = new File(dataBaseDir, String.valueOf(i) + ".dir");
@@ -328,7 +187,5 @@ public class DataTable implements Table {
             }
 
             return curOffset;
-
       }
-
 }
