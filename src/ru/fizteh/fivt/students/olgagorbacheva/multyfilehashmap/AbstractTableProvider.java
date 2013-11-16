@@ -8,7 +8,7 @@ public abstract class AbstractTableProvider<TableType> {
 
       public static final String TABLE_NAME = "[a-zA-Zа-яА-Я0-9]+";
       protected File directory;
-      protected TableType currentDataBase = null;
+      public TableType currentDataBase = null;
       protected Map<String, TableType> tables = new HashMap<String, TableType>();
 
       public TableType getTable(String name) {

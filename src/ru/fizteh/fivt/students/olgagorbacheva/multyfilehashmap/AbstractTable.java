@@ -154,7 +154,7 @@ public abstract class AbstractTable<KeyType, ValueType> {
       }
 
 
-      public abstract void read(File dataBaseFile) throws IOException;
+      public abstract void readFile() throws IOException;
       
       public abstract void writeFile() throws FileNotFoundException, IOException, FileMapException;
       
