@@ -33,8 +33,6 @@ public abstract class AbstractTableProvider<TableType> {
             return currentDataBase;
       }
 
-      public abstract TableType createTable(String name);
-
       private void deleteFiles(File f) {
             if (f.isDirectory()) {
                   File[] incFiles = f.listFiles();

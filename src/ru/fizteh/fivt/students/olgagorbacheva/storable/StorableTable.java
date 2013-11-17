@@ -15,8 +15,9 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
 
       private List<Class<?>> columnTypes;
 
-      public StorableTable(String name, File directory) {
+      public StorableTable(String name, File directory, List<Class<?>> columnTypes) {
             super(name, directory);
+            this.columnTypes = columnTypes;
       }
 
       @Override
@@ -33,23 +34,11 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
       }
 
       @Override
-      public void readFile() throws IOException {
-            // TODO Auto-generated method stub
-
-      }
-
-      @Override
-      public void writeFile() throws FileNotFoundException, IOException, FileMapException {
-            // TODO Auto-generated method stub
-
-      }
-
-      @Override
       public Storeable put(String key, Storeable value) throws ColumnFormatException {
             if (key == null || value == null || key.toString().trim().equals("") || value.toString().trim().equals("")) {
                   throw new IllegalArgumentException("Неверное значение ключа или значения");
             }
-            StorableUtils.equalsType(value, columnTypes);
+            StorableUtils.equalFormat(value, columnTypes);
             if (dataStorage.get(key) == null && newKeys.get(key) == null || removedKeys.get(key) != null) {
                   if (removedKeys.get(key) != null) {
                         if (removedKeys.get(key) != value) {
@@ -75,5 +64,15 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
 
       }
 
+      @Override
+      public void readFile() throws IOException {
+            // TODO Auto-generated method stub
 
+      }
+
+      @Override
+      public void writeFile() throws FileNotFoundException, IOException, FileMapException {
+            // TODO Auto-generated method stub
+
+      }
 }
