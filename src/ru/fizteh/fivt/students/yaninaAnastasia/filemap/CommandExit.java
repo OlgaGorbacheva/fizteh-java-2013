@@ -8,18 +8,12 @@ public class CommandExit extends Command {
     public boolean exec(String[] args, State curState) throws IOException {
         MultiDBState myState = MultiDBState.class.cast(curState);
         if (myState.table == null) {
-            System.exit(0);
+            return true;
         }
         if (args.length != 0) {
-            System.err.println("Invalid arguments");
-            return false;
+            throw new IllegalArgumentException("Illegal arguments");
         }
-        if (MultiFileMapUtils.save(myState)) {
-            return true;
-        } else {
-            System.err.println("File has not been saved");
-            return false;
-        }
+        return true;
     }
 
     public String getCmd() {
