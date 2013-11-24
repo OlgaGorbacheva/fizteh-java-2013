@@ -12,7 +12,7 @@ public class Storable implements Storeable {
       private List<Object> column;
       private Table table;
 
-      Storable(Table table) {
+      public Storable(Table table) {
             column = new ArrayList<>();
             this.table = table;
             for (int i = 0; i < table.getColumnsCount(); i++) {
@@ -20,7 +20,7 @@ public class Storable implements Storeable {
             }
       }
 
-      Storable(Table table, List<?> values) {
+      public Storable(Table table, List<?> values) {
             column = new ArrayList<>();
             if (column.size() != values.size()) {
                   throw new IndexOutOfBoundsException("Количество колонок в таблице не совдает со строкой значений");

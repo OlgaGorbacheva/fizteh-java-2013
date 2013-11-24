@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.xml.stream.XMLStreamException;
+
 import ru.fizteh.fivt.storage.structured.ColumnFormatException;
 import ru.fizteh.fivt.storage.structured.Storeable;
 import ru.fizteh.fivt.storage.structured.Table;
@@ -36,14 +38,20 @@ public class StorableTableProvider extends AbstractTableProvider<Table> implemen
 
       @Override
       public Storeable deserialize(Table table, String value) throws ParseException {
-            // TODO Auto-generated method stub
-            return null;
+            try {
+                  return StorableUtils.writeToStorable(table, value);
+            } catch (XMLStreamException e) {
+                  throw new RuntimeException("Невозможно прочитать строку таблицы", e);
+            }
       }
 
       @Override
       public String serialize(Table table, Storeable value) throws ColumnFormatException {
-            // TODO Auto-generated method stub
-            return null;
+            try {
+                  return StorableUtils.writeToString(table, value);
+            } catch (XMLStreamException | IOException e) {
+                  throw new RuntimeException("Невозможно представить строку таблицы символьной сторкой", e);
+            }
       }
 
       @Override
