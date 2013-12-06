@@ -1,13 +1,17 @@
 package ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap;
 
-import ru.fizteh.fivt.students.olgagorbacheva.abstractcommands.AbstractDropCommand;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Command;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
 
-public class DropCommand extends AbstractDropCommand<MultyFileMapTableProvider> implements Command {
+public class DropCommand implements Command {
+
+      private String name = "drop";
+      private final int argNumber = 1;
+
+      MultyFileMapTableProvider provider;
 
       public DropCommand(MultyFileMapTableProvider provider) {
-            super(provider);
+            this.provider = provider;
       }
 
       public void execute(String[] args, State state) {
@@ -24,4 +28,13 @@ public class DropCommand extends AbstractDropCommand<MultyFileMapTableProvider> 
             }
 
       }
+
+      public String getName() {
+            return name;
+      }
+
+      public int getArgNumber() {
+            return argNumber;
+      }
+
 }

@@ -1,13 +1,17 @@
 package ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap;
 
-import ru.fizteh.fivt.students.olgagorbacheva.abstractcommands.AbstractCreateCommand;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Command;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
 
-public class CreateCommand extends AbstractCreateCommand<MultyFileMapTableProvider> implements Command {
+public class CreateCommand implements Command {
+
+      private String name = "create";
+      private final int argNumber = 1;
+
+      MultyFileMapTableProvider provider;
 
       public CreateCommand(MultyFileMapTableProvider provider) {
-            super(provider);
+            this.provider = provider;
       }
 
       public void execute(String[] args, State state) {
@@ -17,5 +21,12 @@ public class CreateCommand extends AbstractCreateCommand<MultyFileMapTableProvid
                   System.out.println("created");
             }
       }
-      
+
+      public String getName() {
+            return name;
+      }
+
+      public int getArgNumber() {
+            return argNumber;
+      }
 }
