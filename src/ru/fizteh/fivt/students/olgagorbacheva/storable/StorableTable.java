@@ -3,6 +3,7 @@ package ru.fizteh.fivt.students.olgagorbacheva.storable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import ru.fizteh.fivt.storage.structured.ColumnFormatException;
@@ -14,10 +15,12 @@ import ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap.AbstractTable;
 public class StorableTable extends AbstractTable<String, Storeable> implements Table {
 
       private List<Class<?>> columnTypes;
+      private StorableTableProvider provider;
 
-      public StorableTable(String name, File directory, List<Class<?>> columnTypes) {
+      public StorableTable(String name, File directory, List<Class<?>> columnTypes, StorableTableProvider provider) {
             super(name, directory);
             this.columnTypes = columnTypes;
+            this.provider = provider;
       }
 
       @Override
@@ -66,13 +69,17 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
 
       @Override
       public void readFile() throws IOException {
-            // TODO Auto-generated method stub
-
+            columnTypes = StorableUtils.getSignature(dataBaseDir);
+            try {
+                  StorableUtils.readTable(provider, this);
+            } catch (ParseException e) {
+                  throw new IOException("Ошибка чтения файла", e);
+            }
       }
 
       @Override
       public void writeFile() throws FileNotFoundException, IOException, FileMapException {
-            // TODO Auto-generated method stub
+            StorableUtils.writeTable(provider, this);
 
       }
 }

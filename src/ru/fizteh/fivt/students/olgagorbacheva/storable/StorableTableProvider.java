@@ -15,6 +15,24 @@ import ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap.AbstractTableProv
 
 public class StorableTableProvider extends AbstractTableProvider<Table> implements TableProvider{
 
+      public StorableTableProvider(String dir) {
+            directory = new File(dir);
+            File[] tableList = directory.listFiles();
+            if (tableList.length != 0) {
+                  for (File f : tableList) {
+                        if (f.isDirectory()) {
+                              Table dataTable;
+                              try {
+                                    dataTable = new StorableTable(f.getName(), f, StorableUtils.getSignature(f), this);
+                                    tables.put(f.getName(), dataTable);
+                              } catch (IllegalArgumentException | IOException e) {
+                                    throw new RuntimeException("Невозможно узнать сигнатуру таблицы", e);
+                              }
+                        }
+                  }
+            }
+      }
+      
       @Override
       public Table createTable(String name, List<Class<?>> columnTypes) throws IOException {
             if (name == null || name.isEmpty()) {
@@ -30,7 +48,7 @@ public class StorableTableProvider extends AbstractTableProvider<Table> implemen
             if (!f.mkdir()) {
                   throw new IllegalArgumentException("Создание директории невозможно");
             }
-            Table newTable = new StorableTable(name, f, columnTypes);
+            Table newTable = new StorableTable(name, f, columnTypes, this);
             tables.put(name, newTable);
             StorableUtils.setSignature((StorableTable) newTable);
             return newTable;

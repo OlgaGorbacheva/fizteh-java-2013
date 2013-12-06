@@ -16,6 +16,10 @@ public abstract class AbstractTable<KeyType, ValueType> {
       protected Storage<KeyType, ValueType> removedKeys;
       protected File dataBaseDir;
 
+      public Storage<KeyType, ValueType> getStorage() {
+            return dataStorage;
+      }
+      
       public AbstractTable(String name, File directory) {
             dataBaseName = name;
             dataBaseDir = directory;

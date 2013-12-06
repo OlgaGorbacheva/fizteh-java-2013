@@ -1,14 +1,12 @@
-package ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap;
+package ru.fizteh.fivt.students.olgagorbacheva.storable;
 
 import java.io.File;
+import ru.fizteh.fivt.storage.structured.TableProviderFactory;
 
-import ru.fizteh.fivt.storage.strings.TableProviderFactory;
-
-public class MultyFileMapTableProviderFactory extends AbstractTableProvider<MultyFileMapTableProvider> implements
-            TableProviderFactory {
-
+public class StorableTableProviderFactory implements TableProviderFactory{
+      
       @Override
-      public MultyFileMapTableProvider create(String dir) throws IllegalArgumentException {
+      public StorableTableProvider create(String dir) throws IllegalArgumentException {
             if (dir == null || dir.isEmpty()) {
                   throw new IllegalArgumentException("Недопустимое имя хранилища базы данных");
             }
@@ -22,8 +20,7 @@ public class MultyFileMapTableProviderFactory extends AbstractTableProvider<Mult
             if (!directory.canExecute() || !directory.canRead() || !directory.canWrite()) {
                   throw new IllegalArgumentException("Директория недоступна");
             }
-            MultyFileMapTableProvider tableProvider = new MultyFileMapTableProvider(dir);
+            StorableTableProvider tableProvider = new StorableTableProvider(dir);
             return tableProvider;
       }
-
 }
