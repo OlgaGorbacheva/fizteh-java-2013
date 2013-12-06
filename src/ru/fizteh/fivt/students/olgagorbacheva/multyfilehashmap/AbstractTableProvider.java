@@ -4,13 +4,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.fizteh.fivt.students.olgagorbacheva.commands.TableState;;
-
 public abstract class AbstractTableProvider<TableType> {
 
       public static final String TABLE_NAME = "[a-zA-Zа-яА-Я0-9]+";
       protected File directory;
-      public TableState<TableType> currentTable = new TableState<>();
+      public TableType currentDataBase = null;
       protected Map<String, TableType> tables = new HashMap<>();
 
       public TableType getTable(String name) {
@@ -25,14 +23,14 @@ public abstract class AbstractTableProvider<TableType> {
 
       public TableType setTable(String name) {
             if (name == null || name.isEmpty()) {
-                  state.currentDataBase = null;
+                  currentDataBase = null;
             }
             if (tables.get(name) == null) {
-                  state.currentDataBase = null;
+                  currentDataBase = null;
                   return null;
             }
-            state.currentDataBase = tables.get(name);
-            return state.currentDataBase;
+            currentDataBase = tables.get(name);
+            return currentDataBase;
       }
 
       private void deleteFiles(File f) {
@@ -44,8 +42,6 @@ public abstract class AbstractTableProvider<TableType> {
             }
             f.delete();
       }
-
-      public abstract TableType createTable(String name);
       
       public void removeTable(String name) throws IllegalArgumentException {
             if (name == null || name.isEmpty()) {

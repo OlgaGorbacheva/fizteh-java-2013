@@ -352,4 +352,17 @@ public class StorableUtils {
             return curOffset;
       }
 
+      public static String join(String[] args, String separator, Integer beg, Integer end) {
+            StringBuilder str = new StringBuilder();
+            boolean first = true;
+            for (int i = beg; i < end; i++) {
+                  if (!first) {
+                        str.append(separator);
+                  } else first = false;
+                 str.append(args[i].toString());
+            }
+            return str.toString();
+            
+      }
+
 }

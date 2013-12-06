@@ -1,4 +1,4 @@
-package ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap;
+package ru.fizteh.fivt.students.olgagorbacheva.storable;
 
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Command;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
@@ -8,9 +8,9 @@ public class DropCommand implements Command {
       private String name = "drop";
       private int argNumber = 1;
       
-      private MultyFileMapTableProvider provider;
+      private StorableTableProvider provider;
       
-      public DropCommand(MultyFileMapTableProvider provider) {
+      public DropCommand(StorableTableProvider provider) {
             this.provider = provider;
       }
 
@@ -39,3 +39,4 @@ public class DropCommand implements Command {
             return argNumber;
       }
 }
+
