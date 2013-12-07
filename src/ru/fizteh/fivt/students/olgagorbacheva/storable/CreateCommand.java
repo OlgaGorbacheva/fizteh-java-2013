@@ -10,7 +10,7 @@ import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
 public class CreateCommand implements Command {
 
       private String name = "create";
-      private final int argNumber = 1;
+      private final int argNumber = -1;
 
       StorableTableProvider provider;
 

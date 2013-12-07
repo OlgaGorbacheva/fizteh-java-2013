@@ -16,7 +16,7 @@ import ru.fizteh.fivt.storage.structured.TableProvider;
 import ru.fizteh.fivt.students.olgagorbacheva.filemap.FileMapException;
 import ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap.AbstractTableProvider;
 
-public class StorableTableProvider extends AbstractTableProvider<StorableTable> implements TableProvider{
+public class StorableTableProvider extends AbstractTableProvider<StorableTable> implements TableProvider {
 
       public void writeAll() {
             Iterator<Entry<String, StorableTable>> it = tables.entrySet().iterator();
@@ -29,7 +29,7 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                   }
             }
       }
-      
+
       public StorableTableProvider(String dir) {
             directory = new File(dir);
             File[] tableList = directory.listFiles();
@@ -47,7 +47,7 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                   }
             }
       }
-      
+
       @Override
       public Table createTable(String name, List<Class<?>> columnTypes) throws IOException {
             if (name == null || name.isEmpty()) {
@@ -60,6 +60,16 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                   return null;
             }
             File f = new File(directory, name);
+            if (columnTypes == null) {
+                  throw new IllegalArgumentException("Список типов пуст");
+            }
+            for (Class<?> clazz : columnTypes) {
+                 if (clazz != null) {
+                        if (!StorableTypes.check(clazz)) {
+                              throw new IllegalArgumentException("Недопустимые типы колонок: " + clazz.toString());
+                        }
+                  }
+            }
             if (!f.mkdir()) {
                   throw new IllegalArgumentException("Создание директории невозможно");
             }
@@ -96,6 +106,5 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
       public Storeable createFor(Table table, List<?> values) throws ColumnFormatException, IndexOutOfBoundsException {
             return new Storable(table, values);
       }
-
 
 }

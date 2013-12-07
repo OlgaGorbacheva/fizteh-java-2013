@@ -1,5 +1,6 @@
 package ru.fizteh.fivt.students.olgagorbacheva.storable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +19,9 @@ public class PutCommand implements Command {
             this.provider = provider;
       }
 
-      public void execute(String[] args, State state) throws IllegalArgumentException {
+      public void execute(String[] args, State state) throws IOException, IllegalArgumentException {
             if (provider.currentDataBase == null) {
-                  throw new IllegalArgumentException("Таблица не выбрана");
+                  throw new IllegalArgumentException("put: Таблица не выбрана");
             }
             List<Object> values = new ArrayList<>();
             for (int i = 2; i < args.length; i++) {

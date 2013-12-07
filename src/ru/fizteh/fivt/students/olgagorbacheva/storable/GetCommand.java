@@ -1,5 +1,7 @@
 package ru.fizteh.fivt.students.olgagorbacheva.storable;
 
+import java.io.IOException;
+
 import ru.fizteh.fivt.storage.structured.Storeable;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Command;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
@@ -15,9 +17,9 @@ public class GetCommand implements Command {
             this.provider = provider;
       }
 
-      public void execute(String[] args, State state) {
+      public void execute(String[] args, State state) throws IOException, IllegalArgumentException{
             if (provider.currentDataBase == null) {
-                  throw new IllegalArgumentException("Таблица не выбрана");
+                  throw new IllegalArgumentException("get: Таблица не выбрана");
             }
             Storeable value = provider.currentDataBase.get(args[1]);
             if (value == null) {

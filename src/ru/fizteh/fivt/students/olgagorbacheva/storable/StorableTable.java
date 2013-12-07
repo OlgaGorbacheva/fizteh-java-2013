@@ -31,7 +31,7 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
       @Override
       public Class<?> getColumnType(int columnIndex) throws IndexOutOfBoundsException {
             if (columnIndex < 0 || columnIndex >= columnTypes.size()) {
-                  throw new IndexOutOfBoundsException("Выход за границы");
+                  throw new IndexOutOfBoundsException("Выход за границы таблицы");
             }
             return columnTypes.get(columnIndex);
       }

@@ -104,17 +104,23 @@ public enum StorableTypes {
       }
 
       public static Class<?> getClass(String name) throws ColumnFormatException {
+            if (name.equals("null")) {
+                  return null;
+            }
             StorableTypes type = nameToTypes.get(name);
             if (type == null) {
-                  throw new ColumnFormatException("Данного типа не существует");
+                  throw new ColumnFormatException("Данного типа не существует: " + name);
             }
             return type.clazz;
       }
 
       public static String getName(Class<?> clazz) throws ColumnFormatException {
+            if (clazz.equals(null)) {
+                  return null;
+            }
             StorableTypes type = classToTypes.get(clazz);
             if (type == null) {
-                  throw new ColumnFormatException("Данного типа не существует");
+                  throw new ColumnFormatException("Данного типа не существует:" + clazz.toString());
             }
             return type.name;
       }
@@ -130,13 +136,22 @@ public enum StorableTypes {
 
       public static Object getValueAt(String value, Table table, Integer index) throws ColumnFormatException,
                   IndexOutOfBoundsException {
-            StorableTypes type = classToTypes.get(table.getColumnType(index).getClass());
+            StorableTypes type = classToTypes.get(table.getColumnType(index));
             if (type == null) {
-                  throw new ColumnFormatException("Данного типа не существует");
+                  throw new ColumnFormatException("Данного типа не существует:" + table.getColumnType(index).toString());
             }
             return type.parse(value);
       }
-
+      
+      public static boolean check(Class<?> clazz) {
+            if (clazz == null) {
+                  return true;
+            }
+            if (classToTypes.get(clazz) == null) {
+                  return false;
+            } else return true;
+      }
+      
       abstract public Object parse(String value);
 
       abstract public Object get(Storeable value, Integer index) throws ColumnFormatException,

@@ -51,7 +51,7 @@ public class StorableUtils {
                   }
             }
       }
-      
+
       public static String writeToString(Table table, Storeable value) throws XMLStreamException, IOException,
                   IllegalArgumentException {
             StringWriter str = new StringWriter();
@@ -60,13 +60,13 @@ public class StorableUtils {
                   try {
                         writer.writeStartElement("row");
                         for (int i = 0; i < table.getColumnsCount(); i++) {
-                              writer.writeStartElement("col");
                               if (value.getColumnAt(i) == null) {
-                                    writer.writeStartElement("null");
+                                    writer.writeEmptyElement("null");
                               } else {
+                                    writer.writeStartElement("col");
                                     writer.writeCharacters(StorableTypes.getStringAt(value, i));
+                                    writer.writeEndElement();
                               }
-                              writer.writeEndElement();
                         }
                         writer.writeEndElement();
                   } finally {
@@ -87,6 +87,7 @@ public class StorableUtils {
                         if (!reader.hasNext()) {
                               throw new ParseException("Входная cтрока пуста", 0);
                         }
+                        reader.nextTag();
                         if (!reader.getLocalName().equals("row")) {
                               throw new ParseException("Формат таблицы задан неверно", reader.getLocation()
                                           .getCharacterOffset());
@@ -96,27 +97,34 @@ public class StorableUtils {
                         while (reader.hasNext()) {
                               reader.nextTag();
                               if (!reader.getLocalName().equals("col")) {
-                                    if (!reader.isEndElement()) {
-                                          if (!reader.getLocalName().equals("null")) {
-                                                throw new ParseException("Формат таблицы задан неверно", reader
-                                                            .getLocation().getCharacterOffset());
-                                          }
-                                          index++;
-                                          continue;
-                                    }
-                                    if (reader.getLocalName().equals("row")) {
+                                    if (reader.isEndElement() && reader.getLocalName().equals("row")) {
                                           break;
                                     }
-                                    continue;
-                              }
-                              if (reader.next() == XMLStreamConstants.CHARACTERS) {
-                                    String columnValue = reader.getText();
-                                    returnValue.setColumnAt(index, StorableTypes.getValueAt(columnValue, table, index));
-                              } else {
-                                    reader.nextTag();
-                                    if (!reader.getLocalName().equals("null")) {
-                                          throw new ParseException("Формат таблицы задан неверно", reader.getLocation()
+                                    if (reader.getLocalName().equals("null")) {
+                                          returnValue.setColumnAt(index, null);
+                                          index++;
+                                          reader.nextTag();
+                                    } else {
+                                          throw new ParseException("Неверно задан формат таблицы", reader.getLocation()
                                                       .getCharacterOffset());
+                                    }
+                              } else {
+                                    if (reader.next() == XMLStreamConstants.CHARACTERS) {
+                                          String columnValue = reader.getText();
+                                          returnValue.setColumnAt(index,
+                                                      StorableTypes.getValueAt(columnValue, table, index));
+                                          index++;
+                                    }
+                                    if (!reader.hasNext()) {
+                                          throw new ParseException(
+                                                      "Не соблюден баланс открывающих и закрывающих тегов", reader
+                                                                  .getLocation().getCharacterOffset());
+                                    }
+                                    reader.nextTag();
+                                    if (!reader.isEndElement()) {
+                                          throw new ParseException(
+                                                      "Не соблюден баланс открывающих и закрывающих тегов", reader
+                                                                  .getLocation().getCharacterOffset());
                                     }
                               }
                         }
@@ -140,7 +148,11 @@ public class StorableUtils {
             try {
                   int length = table.getColumnsCount();
                   for (int i = 0; i < length; i++) {
-                        output.writeUTF(StorableTypes.getName(table.getColumnType(i)));
+                        if (table.getColumnType(i) == null) {
+                              output.writeUTF("null");
+                        } else {
+                              output.writeUTF(StorableTypes.getName(table.getColumnType(i)));
+                        }
                   }
             } finally {
                   output.close();
@@ -177,7 +189,10 @@ public class StorableUtils {
                               typeName[i] = typeNameByte.get(i);
                         }
                         typeNameString = new String(typeName, StandardCharsets.UTF_8);
-                        typesList.add(StorableTypes.getClass(typeNameString));
+                        if (typeNameString.equals("null")) {
+                              typesList.add(null);
+                        } else
+                              typesList.add(StorableTypes.getClass(typeNameString));
                         typeNameByte.clear();
                   }
             } finally {
@@ -186,7 +201,8 @@ public class StorableUtils {
             return typesList;
       }
 
-      public static void readTable(StorableTableProvider provider, StorableTable table) throws IOException, java.text.ParseException {
+      public static void readTable(StorableTableProvider provider, StorableTable table) throws IOException,
+                  java.text.ParseException {
             for (int i = 0; i < 16; i++) {
                   File currentDir = new File(table.getWorkingDirectory(), String.valueOf(i) + ".dir");
                   if (currentDir.exists() && currentDir.isDirectory() && currentDir.canRead()) {
@@ -207,8 +223,9 @@ public class StorableUtils {
                   }
             }
       }
-      
-      private static void read(StorableTableProvider provider, StorableTable table, File dataBaseFile) throws IOException, java.text.ParseException {
+
+      private static void read(StorableTableProvider provider, StorableTable table, File dataBaseFile)
+                  throws IOException, java.text.ParseException {
             RandomAccessFile reader = new RandomAccessFile(dataBaseFile, "r");
             try {
                   if (reader.length() == 0) {
@@ -263,7 +280,8 @@ public class StorableUtils {
             }
       }
 
-      public static void writeTable(StorableTableProvider provider, StorableTable table) throws IOException, FileMapException {
+      public static void writeTable(StorableTableProvider provider, StorableTable table) throws IOException,
+                  FileMapException {
             if (table.getStorage().getSize() == 0) {
                   return;
             }
@@ -310,8 +328,9 @@ public class StorableUtils {
             }
             table.getStorage().clear();
       }
-      
-      private static void write(StorableTableProvider provider, StorableTable table, File dataBaseFile, Map<String, Storeable> map) throws IOException {
+
+      private static void write(StorableTableProvider provider, StorableTable table, File dataBaseFile,
+                  Map<String, Storeable> map) throws IOException {
 
             RandomAccessFile writer = new RandomAccessFile(dataBaseFile, "rw");
             try {
@@ -358,11 +377,12 @@ public class StorableUtils {
             for (int i = beg; i < end; i++) {
                   if (!first) {
                         str.append(separator);
-                  } else first = false;
-                 str.append(args[i].toString());
+                  } else
+                        first = false;
+                  str.append(args[i].toString());
             }
             return str.toString();
-            
+
       }
 
 }

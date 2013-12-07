@@ -2,13 +2,31 @@ package ru.fizteh.fivt.students.olgagorbacheva.storable.test;
 
 import static org.junit.Assert.*;
 
+import java.awt.geom.Arc2D.Double;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import ru.fizteh.fivt.students.olgagorbacheva.storable.StorableTable;
+import ru.fizteh.fivt.students.olgagorbacheva.storable.Storable;
 
 public class StorableTest {
 
       @BeforeClass
       public static void setUpBeforeClass() throws Exception {
+            String dir = System.getProperty("fizteh.db.dir");
+            new File(dir, "tableName").mkdir();
+            List<Class<?>> types = new ArrayList<>();
+            types.add(String.class);
+            types.add(Integer.class);
+            types.add(Long.class);
+            types.add(Boolean.class);
+            types.add(Double.class);
+            StorableTable table = new StorableTable("tableName", new File(dir, "tableName"), types, null);
+            Storable tests_st= new Storable(); 
       }
 
       @Test

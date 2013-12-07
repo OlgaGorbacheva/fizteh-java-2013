@@ -20,35 +20,54 @@ public class Storable implements Storeable {
             }
       }
 
-      public Storable(Table table, List<?> values) {
+      public Storable(Table table, List<?> values) throws IndexOutOfBoundsException, ColumnFormatException {
             column = new ArrayList<>();
-            if (column.size() != values.size()) {
-                  throw new IndexOutOfBoundsException("Количество колонок в таблице не совдает со строкой значений");
+            if (values.size() != values.size()) {
+                  throw new IndexOutOfBoundsException("Создание объекта невозможно. Строка значений неверного размера");
             }
             this.table = table;
             for (int i = 0; i < table.getColumnsCount(); i++) {
-                  typeCheck(values.get(i).getClass(), i);
+                  if (values.get(i) == null) {
+                        if (table.getColumnType(i) != null) {
+                              throw new ColumnFormatException("Несовпадение типов столбца "
+                                          + table.getColumnType(i) + " и значения " + values.get(i));
+                        }
+                  } else {
+                        typeCheck(values.get(i).getClass(), i);
+                  }
                   column.add(values.get(i));
             }
       }
 
-      void typeCheck(Class<?> value, int columnIndex) {
-            if (!value.equals(table.getColumnType(columnIndex))) {
-                  throw new ColumnFormatException("Несовпадение типов столбца");
+      void typeCheck(Class<?> value, int columnIndex) throws ColumnFormatException {
+            if (value != null && table.getColumnType(columnIndex) == null) {
+                  throw new ColumnFormatException("Несовпадение типов столбца " + table.getColumnType(columnIndex)
+                              + " и значения " + value);
             }
+            if (!value.equals(table.getColumnType(columnIndex))) {
+                  throw new ColumnFormatException("Несовпадение типов столбца " + table.getColumnType(columnIndex)
+                              + " и значения " + value);
+            }
+            // что делать с long и short???
       }
 
-      void indexCheck(int columnIndex) {
+      void indexCheck(int columnIndex) throws IndexOutOfBoundsException {
             if (columnIndex < 0 || columnIndex >= column.size()) {
-                  throw new IndexOutOfBoundsException("Выход за границы");
+                  throw new IndexOutOfBoundsException("Выход за границы таблицы");
             }
       }
 
       @Override
       public void setColumnAt(int columnIndex, Object value) throws ColumnFormatException, IndexOutOfBoundsException {
-
             indexCheck(columnIndex);
-            typeCheck(value.getClass(), columnIndex);
+            if (value == null) {
+                  if (table.getColumnType(columnIndex) != null) {
+                        throw new ColumnFormatException("Несовпадение типов столбца "
+                                    + table.getColumnType(columnIndex) + " и значения " + value);
+                  }
+            } else {
+                  typeCheck(value.getClass(), columnIndex);
+            }
             column.set(columnIndex, value);
       }
 
@@ -114,7 +133,7 @@ public class Storable implements Storeable {
       public void equalFormat(Storable other) {
             for (int i = 0; i < column.size(); i++) {
                   if (i > other.getSize()) {
-                        throw new ColumnFormatException("Несовпадение типов столбца");
+                        throw new ColumnFormatException("Несовпадение типов столбцов");
                   }
                   typeCheck(other.getColumnAt(i).getClass(), i);
             }

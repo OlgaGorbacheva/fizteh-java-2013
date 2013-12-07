@@ -16,9 +16,9 @@ public class CommitCommand implements Command {
             this.provider = provider;
       }
 
-      public void execute(String[] args, State state) throws IOException {
+      public void execute(String[] args, State state) throws IOException, IllegalArgumentException {
             if (provider.currentDataBase == null) {
-                  throw new IllegalArgumentException("Таблица не выбрана");
+                  throw new IllegalArgumentException("commit: Таблица не выбрана");
             }
             System.out.println(provider.currentDataBase.commit());
       }
