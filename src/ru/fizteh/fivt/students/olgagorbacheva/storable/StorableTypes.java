@@ -140,12 +140,15 @@ public enum StorableTypes {
             if (type == null) {
                   throw new ColumnFormatException("Данного типа не существует:" + table.getColumnType(index).toString());
             }
+            if (value.equals("null")) {
+                  return null;
+            }
             return type.parse(value);
       }
       
       public static boolean check(Class<?> clazz) {
             if (clazz == null) {
-                  return true;
+                  return false;
             }
             if (classToTypes.get(clazz) == null) {
                   return false;

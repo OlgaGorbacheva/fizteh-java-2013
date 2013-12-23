@@ -17,8 +17,14 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
       private List<Class<?>> columnTypes;
       private StorableTableProvider provider;
 
-      public StorableTable(String name, File directory, List<Class<?>> columnTypes, StorableTableProvider provider) {
+      public StorableTable(String name, File directory, List<Class<?>> columnTypes, StorableTableProvider provider)
+                  throws IllegalArgumentException {
             super(name, directory);
+            for (Class<?> clazz : columnTypes) {
+                  if (!StorableTypes.check(clazz)) {
+                        throw new IllegalArgumentException("Недопустимые типы колонк таблицы");
+                  }
+            }
             this.columnTypes = columnTypes;
             this.provider = provider;
       }
@@ -31,7 +37,8 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
       @Override
       public Class<?> getColumnType(int columnIndex) throws IndexOutOfBoundsException {
             if (columnIndex < 0 || columnIndex >= columnTypes.size()) {
-                  throw new IndexOutOfBoundsException("Выход за границы таблицы");
+                  throw new IndexOutOfBoundsException("Выход за границы таблицы: " + columnIndex + "; размер таблицы:"
+                              + columnTypes.size());
             }
             return columnTypes.get(columnIndex);
       }

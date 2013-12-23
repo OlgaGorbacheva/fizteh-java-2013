@@ -56,11 +56,10 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
             if (!name.matches(TABLE_NAME)) {
                   throw new IOException("Недопустимое имя файла");
             }
-            if (tables.get(name) != null) {
-                  return null;
-            }
-            File f = new File(directory, name);
             if (columnTypes == null) {
+                  throw new IllegalArgumentException("Список типов пуст");
+            }
+            if (columnTypes.size() == 0) {
                   throw new IllegalArgumentException("Список типов пуст");
             }
             for (Class<?> clazz : columnTypes) {
@@ -68,14 +67,20 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                         if (!StorableTypes.check(clazz)) {
                               throw new IllegalArgumentException("Недопустимые типы колонок: " + clazz.toString());
                         }
-                  }
+                 } else {
+                       throw new IllegalArgumentException("Недопустимые типы колонок: null не может быть типом колонки");
+                 }
             }
+            if (tables.get(name) != null) {
+                  return null;
+            }
+            File f = new File(directory, name);
             if (!f.mkdir()) {
-                  throw new IllegalArgumentException("Создание директории невозможно");
+                  throw new RuntimeException("Создание директории невозможно");
             }
             StorableTable newTable = new StorableTable(name, f, columnTypes, this);
             tables.put(name, newTable);
-            StorableUtils.setSignature((StorableTable) newTable);
+            StorableUtils.setSignature(newTable);
             return newTable;
       }
 

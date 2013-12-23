@@ -27,23 +27,14 @@ public class Storable implements Storeable {
             }
             this.table = table;
             for (int i = 0; i < table.getColumnsCount(); i++) {
-                  if (values.get(i) == null) {
-                        if (table.getColumnType(i) != null) {
-                              throw new ColumnFormatException("Несовпадение типов столбца "
-                                          + table.getColumnType(i) + " и значения " + values.get(i));
-                        }
-                  } else {
+                  if (values.get(i) != null) {
                         typeCheck(values.get(i).getClass(), i);
                   }
                   column.add(values.get(i));
             }
       }
 
-      void typeCheck(Class<?> value, int columnIndex) throws ColumnFormatException {
-            if (value != null && table.getColumnType(columnIndex) == null) {
-                  throw new ColumnFormatException("Несовпадение типов столбца " + table.getColumnType(columnIndex)
-                              + " и значения " + value);
-            }
+      void typeCheck(Class<?> value, int columnIndex) throws ColumnFormatException {   
             if (!value.equals(table.getColumnType(columnIndex))) {
                   throw new ColumnFormatException("Несовпадение типов столбца " + table.getColumnType(columnIndex)
                               + " и значения " + value);
@@ -60,12 +51,7 @@ public class Storable implements Storeable {
       @Override
       public void setColumnAt(int columnIndex, Object value) throws ColumnFormatException, IndexOutOfBoundsException {
             indexCheck(columnIndex);
-            if (value == null) {
-                  if (table.getColumnType(columnIndex) != null) {
-                        throw new ColumnFormatException("Несовпадение типов столбца "
-                                    + table.getColumnType(columnIndex) + " и значения " + value);
-                  }
-            } else {
+            if (value != null) {
                   typeCheck(value.getClass(), columnIndex);
             }
             column.set(columnIndex, value);

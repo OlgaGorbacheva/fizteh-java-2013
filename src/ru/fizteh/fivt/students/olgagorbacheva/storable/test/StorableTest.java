@@ -1,87 +1,91 @@
 package ru.fizteh.fivt.students.olgagorbacheva.storable.test;
 
-import static org.junit.Assert.*;
-
-import java.awt.geom.Arc2D.Double;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.Assert;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ru.fizteh.fivt.students.olgagorbacheva.storable.StorableTable;
-import ru.fizteh.fivt.students.olgagorbacheva.storable.Storable;
+import ru.fizteh.fivt.storage.structured.ColumnFormatException;
+import ru.fizteh.fivt.storage.structured.Storeable;
+import ru.fizteh.fivt.storage.structured.Table;
+import ru.fizteh.fivt.students.olgagorbacheva.storable.StorableTableProvider;
+import ru.fizteh.fivt.students.olgagorbacheva.storable.StorableTableProviderFactory;
 
 public class StorableTest {
 
+      static Storeable storable;
+      static Table table;
+      static StorableTableProvider provider;
+      static StorableTableProviderFactory factory;
+      static String dir = System.getProperty("fizteh.db.dir");
+      
       @BeforeClass
       public static void setUpBeforeClass() throws Exception {
-            String dir = System.getProperty("fizteh.db.dir");
-            new File(dir, "tableName").mkdir();
             List<Class<?>> types = new ArrayList<>();
             types.add(String.class);
             types.add(Integer.class);
-            types.add(Long.class);
             types.add(Boolean.class);
+            types.add(String.class);
             types.add(Double.class);
-            StorableTable table = new StorableTable("tableName", new File(dir, "tableName"), types, null);
-            Storable tests_st= new Storable(); 
+            factory = new StorableTableProviderFactory();
+            provider = factory.create(dir);
+            table = provider.createTable("table", types);
+            storable = provider.createFor(table);
       }
 
-      @Test
-      public void testTypeCheck() {
-            fail("Not yet implemented");
+      @AfterClass
+      public static void tearDownAfterClass() throws Exception {
+            provider.removeTable("table");
       }
-
-      @Test
-      public void testIndexCheck() {
-            fail("Not yet implemented");
+      
+      @Test (expected = IndexOutOfBoundsException.class)
+      public void testSetColumnAtOutOfBounds() {
+            storable.setColumnAt(10, "какая-то хрень");
       }
-
-      @Test
+      
+      @Test (expected = ColumnFormatException.class)
+      public void testSetColumnAtOtherType() {
+            storable.setColumnAt(1, "какая-то хрень");
+      }
+      
+      @Test 
       public void testSetColumnAt() {
-            fail("Not yet implemented");
+            storable.setColumnAt(0, "какая-то хрень");
+            storable.setColumnAt(1, 0);
+            storable.setColumnAt(2, true);
+            storable.setColumnAt(3, "новая хрень");
+            storable.setColumnAt(4, null);
       }
 
+      @Test (expected = IndexOutOfBoundsException.class)
+      public void testGetColumnAtOutOfBounds() {
+            storable.getColumnAt(10);
+      }
+      
       @Test
       public void testGetColumnAt() {
-            fail("Not yet implemented");
+            Assert.assertNull(storable.getColumnAt(4));
+            Assert.assertEquals(true, storable.getColumnAt(2));
       }
 
-      @Test
+      @Test (expected = ColumnFormatException.class)
       public void testGetIntAt() {
-            fail("Not yet implemented");
-      }
-
-      @Test
-      public void testGetLongAt() {
-            fail("Not yet implemented");
-      }
-
-      @Test
-      public void testGetByteAt() {
-            fail("Not yet implemented");
-      }
-
-      @Test
-      public void testGetFloatAt() {
-            fail("Not yet implemented");
+            storable.getIntAt(0);
       }
 
       @Test
       public void testGetDoubleAt() {
-            fail("Not yet implemented");
+            Assert.assertNull(storable.getDoubleAt(4));
       }
 
-      @Test
-      public void testGetBooleanAt() {
-            fail("Not yet implemented");
-      }
 
       @Test
       public void testGetStringAt() {
-            fail("Not yet implemented");
+            Assert.assertEquals("какая-то хрень", storable.getStringAt(0));
       }
 
 }

@@ -44,10 +44,8 @@ public class StorableUtils {
 
       public static void equalFormat(Storeable struct, List<Class<?>> list) throws ColumnFormatException {
             for (int i = 0; i < list.size(); i++) {
-                  try {
+                  if (struct.getColumnAt(i) != null) {
                         typeCheck(list.get(i), struct.getColumnAt(i).getClass());
-                  } catch (IndexOutOfBoundsException e) {
-                        throw new ColumnFormatException("Несовпадение типов столбца");
                   }
             }
       }
@@ -148,11 +146,7 @@ public class StorableUtils {
             try {
                   int length = table.getColumnsCount();
                   for (int i = 0; i < length; i++) {
-                        if (table.getColumnType(i) == null) {
-                              output.writeUTF("null");
-                        } else {
-                              output.writeUTF(StorableTypes.getName(table.getColumnType(i)));
-                        }
+                        output.write((StorableTypes.getName(table.getColumnType(i)) + " ").getBytes(StandardCharsets.UTF_8));
                   }
             } finally {
                   output.close();
@@ -180,20 +174,19 @@ public class StorableUtils {
                         do {
                               currentByte = input.readByte();
                               position++;
-                              if (currentByte != ' ') {
+                              if (currentByte != ' ' && currentByte != 0) {
                                     typeNameByte.add(currentByte);
                               }
                         } while (position < fileLength && currentByte != ' ');
-                        typeName = new byte[typeNameByte.size()];
-                        for (int i = 0; i < typeNameByte.size(); i++) {
-                              typeName[i] = typeNameByte.get(i);
-                        }
-                        typeNameString = new String(typeName, StandardCharsets.UTF_8);
-                        if (typeNameString.equals("null")) {
-                              typesList.add(null);
-                        } else
+                        if (typeNameByte.size() > 0 && typeNameByte.get(0).byteValue() != 0) {
+                              typeName = new byte[typeNameByte.size()];
+                              for (int i = 0; i < typeNameByte.size(); i++) {
+                                    typeName[i] = typeNameByte.get(i);
+                              }
+                              typeNameString = new String(typeName, StandardCharsets.UTF_8);
                               typesList.add(StorableTypes.getClass(typeNameString));
-                        typeNameByte.clear();
+                              typeNameByte.clear();
+                        }
                   }
             } finally {
                   input.close();
@@ -355,7 +348,7 @@ public class StorableUtils {
                   }
             } catch (IOException e) {
                   writer.close();
-                  throw new IOException("Ошибка записи файла");
+                  throw new IOException("Ошибка записи файла", e);
             }
 
             writer.close();

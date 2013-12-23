@@ -33,12 +33,32 @@ public class StorableTableProviderTest {
             provider.removeTable("table");
       }
 
+      @Test (expected = IllegalArgumentException.class)
+      public void testCreateWithNullTypeTable() throws IOException {
+            List<Class<?>> types = new ArrayList<>();
+            types.add(String.class);
+            types.add(Integer.class);
+            types.add(null);
+            types.add(Boolean.class);
+            types.add(Double.class);
+            provider.createTable("table", types);
+      }
+      
+      @Test (expected = IllegalArgumentException.class)
+      public void testCreateNullTable() throws IOException {
+            List<Class<?>> types = new ArrayList<>();
+            types.add(String.class);
+            types.add(Integer.class);
+            types.add(Boolean.class);
+            types.add(Double.class);
+            provider.createTable(null, types);
+      }
+      
       @Test
       public void testCreateTable() throws IOException {
             List<Class<?>> types = new ArrayList<>();
             types.add(String.class);
             types.add(Integer.class);
-            types.add(null);
             types.add(Boolean.class);
             types.add(Double.class);
             provider.createTable("table", types);
@@ -60,7 +80,6 @@ public class StorableTableProviderTest {
             List<Class<?>> types = new ArrayList<>();
             types.add(String.class);
             types.add(Integer.class);
-            types.add(null);
             types.add(Boolean.class);
             types.add(Double.class);
             Assert.assertEquals(provider.createTable("table", types), null);
@@ -72,10 +91,9 @@ public class StorableTableProviderTest {
             Storeable st = new Storable(provider.currentDataBase);
             st.setColumnAt(0, "Все очень плохо");
             st.setColumnAt(1, 10);
-            st.setColumnAt(2, null);
-            st.setColumnAt(3, true);
-            st.setColumnAt(4, 3.1415);
-            String storable = "<row><col>Все очень плохо</col><col>10</col><null/><col>true</col><col>3.1415</col></row>";
+            st.setColumnAt(2, true);
+            st.setColumnAt(3, null);
+            String storable = "<row><col>Все очень плохо</col><col>10</col><col>true</col><null/></row>";
             Storeable newSt = provider.deserialize(provider.currentDataBase, storable);
             for (int i = 0; i < provider.currentDataBase.getColumnsCount(); i++) {
                   Assert.assertEquals(newSt.getColumnAt(i), st.getColumnAt(i));
@@ -88,10 +106,9 @@ public class StorableTableProviderTest {
             Storable st = new Storable(provider.currentDataBase);
             st.setColumnAt(0, "Все очень плохо");
             st.setColumnAt(1, 10);
-            st.setColumnAt(2, null);
-            st.setColumnAt(3, true);
-            st.setColumnAt(4, 3.1415);
-            String storable = "<row><col>Все очень плохо</col><col>10</col><null/><col>true</col><col>3.1415</col></row>";
+            st.setColumnAt(2, true);
+            st.setColumnAt(3, null);
+            String storable = "<row><col>Все очень плохо</col><col>10</col><col>true</col><null/></row>";
             Assert.assertEquals(provider.serialize(provider.currentDataBase, st), storable);
       }
 
@@ -102,15 +119,13 @@ public class StorableTableProviderTest {
             Storeable st = new Storable(provider.currentDataBase);
             st.setColumnAt(0, "Все очень плохо");
             st.setColumnAt(1, 10);
-            st.setColumnAt(2, null);
-            st.setColumnAt(3, true);
-            st.setColumnAt(4, 3.1415);
+            st.setColumnAt(2, true);
+            st.setColumnAt(3, null);
             List<Object> list = new ArrayList<>();
             list.add("Все очень плохо");
             list.add(10);
-            list.add(null);
             list.add(true);
-            list.add(3.1415);
+            list.add(null);
             Storeable newSt = provider.createFor(provider.currentDataBase, list);
             for (int i = 0; i < provider.currentDataBase.getColumnsCount(); i++) {
                   Assert.assertEquals(newSt.getColumnAt(i), st.getColumnAt(i));

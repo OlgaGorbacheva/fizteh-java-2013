@@ -2,7 +2,6 @@ package ru.fizteh.fivt.students.olgagorbacheva.storable.test;
 
 import java.io.File;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -51,12 +50,8 @@ public class StorableTableProviderFactoryTest {
       
       @Test
       public void createTableProvider() {
-            factory.create(dir);
-      }
-
-      @AfterClass
-      public static void tearDownAfterClass() throws Exception {
             new File(dir, "dir").delete();
+            factory.create(dir);
       }
 
 }

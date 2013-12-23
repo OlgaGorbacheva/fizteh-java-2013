@@ -17,7 +17,7 @@ public class GetCommand implements Command {
             this.provider = provider;
       }
 
-      public void execute(String[] args, State state) throws IOException, IllegalArgumentException{
+      public void execute(String[] args, State state) throws IOException, IllegalArgumentException {
             if (provider.currentDataBase == null) {
                   throw new IllegalArgumentException("get: Таблица не выбрана");
             }
@@ -27,7 +27,11 @@ public class GetCommand implements Command {
             } else {
                   System.out.println("found" + "\n");
                   for (int i = 0; i < provider.currentDataBase.getColumnsCount(); i++) {
-                        System.out.print(value.getColumnAt(i).toString() + " ");
+                        if (value.getColumnAt(i) == null) {
+                              System.out.print("null ");
+                        } else {
+                              System.out.print(value.getColumnAt(i).toString() + " ");
+                        }
                   }
             }
       }

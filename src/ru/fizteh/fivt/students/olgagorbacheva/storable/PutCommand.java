@@ -32,7 +32,7 @@ public class PutCommand implements Command {
             if (value == null) {
                   System.out.println("new");
             } else {
-                  System.out.println("overwrite" + "\n");
+                  System.out.println("overwrite");
                   for (int i = 0; i < provider.currentDataBase.getColumnsCount(); i++) {
                         System.out.print(value.getColumnAt(i).toString() + " ");
                   }
