@@ -4,7 +4,7 @@ public class FileMapException extends Exception {
 
       private static final long serialVersionUID = -8333296962044558961L;
 
-      private String message;
+      private final String message;
 
       public FileMapException(String message) {
             this.message = message;
