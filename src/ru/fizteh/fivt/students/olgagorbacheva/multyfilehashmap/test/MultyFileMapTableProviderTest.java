@@ -1,7 +1,5 @@
 package ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap.test;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.junit.Assert;
@@ -9,7 +7,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap.MultyFileMapTableProvider;
-import ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap.MultyFileMapTableProviderFactory;
 
 public class MultyFileMapTableProviderTest {
 

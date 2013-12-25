@@ -1,7 +1,5 @@
 package ru.fizteh.fivt.students.olgagorbacheva.multyfilehashmap.test;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.junit.BeforeClass;
