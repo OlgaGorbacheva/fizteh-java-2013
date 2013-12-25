@@ -19,7 +19,7 @@ public abstract class AbstractTable<KeyType, ValueType> {
       public Storage<KeyType, ValueType> getStorage() {
             return dataStorage;
       }
-      
+
       public AbstractTable(String name, File directory) {
             dataBaseName = name;
             dataBaseDir = directory;
@@ -54,7 +54,8 @@ public abstract class AbstractTable<KeyType, ValueType> {
       }
 
       public ValueType put(KeyType key, ValueType value) {
-            if (key == null || value == null || key.toString().trim().equals("") || value.toString().trim().equals("")) {
+            if (key == null || value == null || key.toString().trim().equals("") 
+                        || value.toString().trim().equals("")) {
                   throw new IllegalArgumentException("Неверное значение ключа или значения");
             }
             if (dataStorage.get(key) == null && newKeys.get(key) == null || removedKeys.get(key) != null) {
@@ -157,9 +158,8 @@ public abstract class AbstractTable<KeyType, ValueType> {
             return size;
       }
 
-
       public abstract void readFile() throws IOException;
-      
+
       public abstract void writeFile() throws FileNotFoundException, IOException, FileMapException;
-      
+
 }
