@@ -15,13 +15,13 @@ public class CopyCommand implements Command {
             
       }
       
-      public void execute(String args[], State state) throws ShellException {
+      public void execute(String[] args, State state) throws ShellException {
             File source;
             File destination;
             if (Paths.get(args[1]).isAbsolute()) {
                   source = new File(args[1]);
-            }else {
-                  source = new File(new File (state.getState()), args[1]);
+            } else {
+                  source = new File(new File(state.getState()), args[1]);
             }   
             if (Paths.get(args[1]).isAbsolute()) {
                   destination = new File(args[2]);
@@ -73,10 +73,8 @@ public class CopyCommand implements Command {
                         } 
                         inputStream.close();
                         outputStream.close();
-                  }
-                  
-            }
-            catch(IOException exp) {
+                  }                  
+            } catch(IOException exp) {
                   throw new ShellException("cp: произошла ошибка при копировании");
             }
       }

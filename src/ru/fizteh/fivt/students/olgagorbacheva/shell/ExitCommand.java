@@ -5,7 +5,7 @@ public class ExitCommand implements Command  {
       private final int argNumber = 0;
       
       
-      public void execute(String args[], State state) {
+      public void execute(String[] args, State state) {
       }
       
       public String getName() {

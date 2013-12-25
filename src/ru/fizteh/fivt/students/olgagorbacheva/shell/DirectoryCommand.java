@@ -10,10 +10,10 @@ public class DirectoryCommand implements Command {
             
       }
       
-      public void execute(String args[], State state) {
+      public void execute(String[] args, State state) {
             File f = new File(state.getState());
             String[] flist = f.list();
-            for (String incF: flist){
+            for (String incF: flist) {
                   System.out.println(incF);
             }
       }

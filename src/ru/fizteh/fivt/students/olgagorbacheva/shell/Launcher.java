@@ -23,14 +23,19 @@ public class Launcher {
                   throw new IOException(args[0] + ": нет такой комманды!");
             }
             if (((com.getArgNumber() + 1) != args.length && (com.getArgNumber() != -1))
-                        || (args.length == 1 && (com.getArgNumber() == -1))) { //-1 любое кол-во аргументов >1
+                        || (args.length == 1 && (com.getArgNumber() == -1))) { // -1
+                                                                               // любое
+                                                                               // кол-во
+                                                                               // аргументов
+                                                                               // >1
                   throw new IOException(args[0] + ": неверное количество аргументов");
             }
             com.execute(args, state);
 
             if (args[0].equals("exit")) {
                   return false;
-            } else
+            } else {
                   return true;
+            }
       }
 }
