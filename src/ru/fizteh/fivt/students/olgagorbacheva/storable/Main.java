@@ -1,5 +1,7 @@
 package ru.fizteh.fivt.students.olgagorbacheva.storable;
 
+import java.io.IOException;
+
 import ru.fizteh.fivt.students.olgagorbacheva.shell.ExitCommand;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Shell;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
@@ -33,7 +35,7 @@ public class Main {
                   storable.execute(args);
 
                   provider.writeAll();
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | IOException e) {
                   System.err.println(e.getMessage());
                   System.exit(1);
             }
