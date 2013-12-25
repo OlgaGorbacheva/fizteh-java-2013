@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,8 +25,6 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 import ru.fizteh.fivt.storage.structured.ColumnFormatException;
 import ru.fizteh.fivt.storage.structured.Storeable;
@@ -76,7 +75,7 @@ public class StorableUtils {
             return str.toString();
       }
 
-      public static Storeable writeToStorable(Table table, String value) throws XMLStreamException {
+      public static Storeable writeToStorable(Table table, String value) throws XMLStreamException, ParseException {
             StringReader str = new StringReader(value);
             Storeable returnValue;
             try {
