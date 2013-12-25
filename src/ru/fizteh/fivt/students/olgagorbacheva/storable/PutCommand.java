@@ -27,6 +27,9 @@ public class PutCommand implements Command {
             if (args[1].split("\\s+").length != 0) {
                   throw new IllegalArgumentException("неподходящий ключ");
             }
+            if (args.length > provider.currentDataBase.getColumnsCount() + 1) {
+                  throw new IllegalArgumentException("тип ьабицы и значения не совпадают");
+            }
             List<Object> values = new ArrayList<>();
             try {
                   for (int i = 2; i < args.length; i++) {
