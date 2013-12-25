@@ -41,7 +41,8 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                                     dataTable = new StorableTable(f.getName(), f, StorableUtils.getSignature(f), this);
                                     tables.put(f.getName(), dataTable);
                               } catch (IllegalArgumentException | IOException e) {
-                                    throw new RuntimeException("Невозможно узнать сигнатуру таблицы", e);
+                                    System.err.println(e.getLocalizedMessage());
+                                    System.exit(-1);
                               }
                         }
                   }
