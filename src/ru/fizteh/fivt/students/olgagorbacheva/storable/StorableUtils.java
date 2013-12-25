@@ -34,7 +34,7 @@ import ru.fizteh.fivt.students.olgagorbacheva.filemap.FileMapException;
 
 public class StorableUtils {
 
-      static final String signatureFileName = "signature.tsv";
+      static final String SIGNATURE_FILE_NAME = "signature.tsv";
 
       private static void typeCheck(Class<?> value1, Class<?> value2) throws ColumnFormatException {
             if (!value1.equals(value1)) {
@@ -136,7 +136,7 @@ public class StorableUtils {
       }
 
       public static void setSignature(StorableTable table) throws IOException {
-            File signFile = new File(table.getWorkingDirectory(), signatureFileName);
+            File signFile = new File(table.getWorkingDirectory(), SIGNATURE_FILE_NAME);
             if (!signFile.exists()) {
                   if (!signFile.createNewFile()) {
                         throw new IOException("Невозможно создать файл для сигнатуры");
@@ -155,7 +155,7 @@ public class StorableUtils {
       }
 
       public static List<Class<?>> getSignature(File tableDir) throws IllegalArgumentException, IOException {
-            File signFile = new File(tableDir, signatureFileName);
+            File signFile = new File(tableDir, SIGNATURE_FILE_NAME);
             if (!signFile.exists()) {
                   throw new IllegalArgumentException("Некорректный формат таблицы: файл с сигнатурой отсутствует");
             }
