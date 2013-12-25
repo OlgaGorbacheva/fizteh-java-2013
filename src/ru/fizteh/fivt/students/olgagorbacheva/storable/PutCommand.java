@@ -20,9 +20,12 @@ public class PutCommand implements Command {
             this.provider = provider;
       }
 
-      public void execute(String[] args, State state) throws IOException, IllegalArgumentException {
+      public void execute(String[] args, State state) throws IOException, IllegalArgumentException {            
             if (provider.currentDataBase == null) {
                   throw new IllegalArgumentException("put: Таблица не выбрана");
+            }
+            if (args[1].split("\\s+").length != 0) {
+                  throw new IllegalArgumentException("неподходящий ключ");
             }
             List<Object> values = new ArrayList<>();
             try {

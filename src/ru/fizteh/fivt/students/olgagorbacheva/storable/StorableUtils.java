@@ -41,7 +41,11 @@ public class StorableUtils {
             }
       }
 
-      public static void equalFormat(Storeable struct, List<Class<?>> list) throws ColumnFormatException {
+      public static void equalFormat(Storeable struct, List<Class<?>> list, StorableTable table)
+                  throws ColumnFormatException, IndexOutOfBoundsException{
+            if (list.size() != table.getColumnsCount()) {
+                  throw new IndexOutOfBoundsException("количество колонок таблицы и строки значений не совпадают");
+            }
             for (int i = 0; i < list.size(); i++) {
                   if (struct.getColumnAt(i) != null) {
                         typeCheck(list.get(i), struct.getColumnAt(i).getClass());
