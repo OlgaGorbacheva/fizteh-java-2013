@@ -55,7 +55,7 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                   throw new IllegalArgumentException("Недопустимое название таблицы");
             }
             if (!name.matches(TABLE_NAME)) {
-                  throw new IOException("Недопустимое имя файла");
+                  throw new RuntimeException("Недопустимое имя таблицы");
             }
             if (columnTypes == null) {
                   throw new IllegalArgumentException("Список типов пуст");
