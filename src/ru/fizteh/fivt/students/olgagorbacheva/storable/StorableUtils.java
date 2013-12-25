@@ -34,7 +34,7 @@ import ru.fizteh.fivt.students.olgagorbacheva.filemap.FileMapException;
 
 public class StorableUtils {
 
-      static private String SIGNATURE_FILE_NAME = "signature.tsv";
+      static final String signatureFileName = "signature.tsv";
 
       private static void typeCheck(Class<?> value1, Class<?> value2) throws ColumnFormatException {
             if (!value1.equals(value1)) {
@@ -136,7 +136,7 @@ public class StorableUtils {
       }
 
       public static void setSignature(StorableTable table) throws IOException {
-            File signFile = new File(table.getWorkingDirectory(), SIGNATURE_FILE_NAME);
+            File signFile = new File(table.getWorkingDirectory(), signatureFileName);
             if (!signFile.exists()) {
                   if (!signFile.createNewFile()) {
                         throw new IOException("Невозможно создать файл для сигнатуры");
@@ -146,7 +146,8 @@ public class StorableUtils {
             try {
                   int length = table.getColumnsCount();
                   for (int i = 0; i < length; i++) {
-                        output.write((StorableTypes.getName(table.getColumnType(i)) + " ").getBytes(StandardCharsets.UTF_8));
+                        output.write((StorableTypes.getName(table.getColumnType(i)) + " ")
+                                    .getBytes(StandardCharsets.UTF_8));
                   }
             } finally {
                   output.close();
@@ -154,7 +155,7 @@ public class StorableUtils {
       }
 
       public static List<Class<?>> getSignature(File tableDir) throws IllegalArgumentException, IOException {
-            File signFile = new File(tableDir, SIGNATURE_FILE_NAME);
+            File signFile = new File(tableDir, signatureFileName);
             if (!signFile.exists()) {
                   throw new IllegalArgumentException("Некорректный формат таблицы: файл с сигнатурой отсутствует");
             }
@@ -287,9 +288,8 @@ public class StorableUtils {
             }
             while (it.hasNext()) {
                   Entry<String, Storeable> elem = it.next();
-                  int a, b;
-                  a = Math.abs(elem.getKey().hashCode() % 16);
-                  b = Math.abs(elem.getKey().hashCode() / 16 % 16);
+                  int a = Math.abs(elem.getKey().hashCode() % 16);
+                  int b = Math.abs(elem.getKey().hashCode() / 16 % 16);
                   dataBase.get(a * 16 + b).put(elem.getKey(), elem.getValue());
             }
             for (int i = 0; i < 256; i++) {
@@ -370,8 +370,9 @@ public class StorableUtils {
             for (int i = beg; i < end; i++) {
                   if (!first) {
                         str.append(separator);
-                  } else
+                  } else {
                         first = false;
+                  }
                   str.append(args[i].toString());
             }
             return str.toString();
