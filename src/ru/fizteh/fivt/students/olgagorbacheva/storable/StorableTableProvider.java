@@ -69,7 +69,7 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                         }
                  } else {
                        throw new IllegalArgumentException("Недопустимые типы колонок: "
-                       		+ "null не может быть типом колонки");
+                                   + "null не может быть типом колонки");
                  }
             }
             if (tables.get(name) != null) {

@@ -32,10 +32,6 @@ public class Launcher {
             }
             com.execute(args, state);
 
-            if (args[0].equals("exit")) {
-                  return false;
-            } else {
-                  return true;
-            }
+            return !args[0].equals("exit");
       }
 }

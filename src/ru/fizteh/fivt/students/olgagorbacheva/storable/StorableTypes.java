@@ -138,7 +138,8 @@ public enum StorableTypes {
                   IndexOutOfBoundsException {
             StorableTypes type = classToTypes.get(table.getColumnType(index));
             if (type == null) {
-                  throw new ColumnFormatException("Данного типа не существует:" + table.getColumnType(index).toString());
+                  throw new ColumnFormatException("Данного типа не существует:"
+                                    + table.getColumnType(index).toString());
             }
             if (value.equals("null")) {
                   return null;
@@ -147,16 +148,11 @@ public enum StorableTypes {
       }
       
       public static boolean check(Class<?> clazz) {
-            if (clazz == null) {
-                  return false;
-            }
-            if (classToTypes.get(clazz) == null) {
-                  return false;
-            } else return true;
+            return (clazz != null) && (classToTypes.get(clazz) != null);
       }
       
-      abstract public Object parse(String value);
+      abstract Object parse(String value);
 
-      abstract public Object get(Storeable value, Integer index) throws ColumnFormatException,
+      abstract Object get(Storeable value, Integer index) throws ColumnFormatException,
                   IndexOutOfBoundsException;
 }
