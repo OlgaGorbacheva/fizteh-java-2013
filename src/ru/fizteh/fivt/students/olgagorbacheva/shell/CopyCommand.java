@@ -25,7 +25,7 @@ public class CopyCommand implements Command {
             }   
             if (Paths.get(args[1]).isAbsolute()) {
                   destination = new File(args[2]);
-            }else {
+            } else {
                   destination = new File(new File(state.getState()), args[2]);
             }
             if (!source.exists()) {                  
@@ -74,7 +74,7 @@ public class CopyCommand implements Command {
                         inputStream.close();
                         outputStream.close();
                   }                  
-            } catch(IOException exp) {
+            } catch (IOException exp) {
                   throw new ShellException("cp: произошла ошибка при копировании");
             }
       }

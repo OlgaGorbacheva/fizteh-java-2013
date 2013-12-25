@@ -15,7 +15,7 @@ public class RemoveCommand implements Command {
             File f;
             if (Paths.get(args[1]).isAbsolute()) {
                   f = new File(args[1]);
-            }else {
+            } else {
                   f = new File(new File(state.getState()), args[1]);
             }                             
             if (!f.exists()) {                  

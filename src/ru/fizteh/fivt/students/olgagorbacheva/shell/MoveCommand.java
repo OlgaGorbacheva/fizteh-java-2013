@@ -12,12 +12,12 @@ public class MoveCommand implements Command {
             
       }
       
-      public void execute(String args[], State state) throws ShellException {
+      public void execute(String[] args, State state) throws ShellException {
             File source;
             File destination;
             if (Paths.get(args[1]).isAbsolute()) {
                   source = new File(args[1]);
-            }else {
+            } else {
                   source = new File(new File(((State) state).getState()), args[1]);
             }   
             if (Paths.get(args[1]).isAbsolute()) {
@@ -25,8 +25,8 @@ public class MoveCommand implements Command {
             } else {
                   destination = new File(new File(((State) state).getState()), args[2]);
             }
-            if (!destination.exists() && 
-                        destination.getParentFile().getAbsolutePath().equals(source.getParentFile().getAbsolutePath())) {
+            if (!destination.exists() && destination.getParentFile().getAbsolutePath()
+                       .equals(source.getParentFile().getAbsolutePath())) {
                   source.renameTo(destination);
                   return;
             }
@@ -38,8 +38,7 @@ public class MoveCommand implements Command {
                   argToRm[1] = "rm";
                   argToRm[2] = args[2];
                   rm.execute(argToRm, (State) state);
-            }
-            catch(ShellException exp) {
+            } catch (ShellException exp) {
                   throw new ShellException("mv:" + exp.getMessage().substring(3));
             }
       }

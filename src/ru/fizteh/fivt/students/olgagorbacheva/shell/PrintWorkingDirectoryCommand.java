@@ -8,7 +8,7 @@ public class PrintWorkingDirectoryCommand implements Command  {
             
       }
       
-      public void execute(String args[], State state) {
+      public void execute(String[] args, State state) {
             System.out.println(state.getState());
       }
       

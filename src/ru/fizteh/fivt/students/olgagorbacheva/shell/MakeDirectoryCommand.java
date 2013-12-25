@@ -10,7 +10,7 @@ public class MakeDirectoryCommand implements Command {
             
       }
       
-      public void execute(String args[], State state) throws ShellException {
+      public void execute(String[] args, State state) throws ShellException {
             File f = new File(new File(state.getState()), args[1]);                            
             if (f.exists()) {                  
                   throw new ShellException("mkdir: файл с таким именем уже существует");

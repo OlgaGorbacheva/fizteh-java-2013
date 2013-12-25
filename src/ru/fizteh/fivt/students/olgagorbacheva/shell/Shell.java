@@ -36,8 +36,7 @@ public class Shell{
                               String[] args = argumentParse(c);
                               flag = launch.execute(args, state);
                         }
-                  }
-                  catch (IOException | IllegalArgumentException exp) {
+                  } catch (IOException | IllegalArgumentException exp) {
                         System.err.println(exp.getLocalizedMessage());
                   }
             } while(flag);
@@ -51,8 +50,7 @@ public class Shell{
                         String[] args = argumentParse(c);
                         launch.execute(args, state);
                   }
-            }
-            catch (IOException  exp) {
+            } catch (IOException  exp) {
                   System.err.println(exp.getLocalizedMessage());
                   System.exit(-1);
             }
@@ -65,7 +63,9 @@ public class Shell{
             for (Object o: objects) {
                   if (!first) {
                         argument.append(separator);
-                  } else first = false;
+                  } else {
+                        first = false;
+                  }
                   argument.append(o.toString());
             }
             return argument.toString();
