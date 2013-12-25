@@ -40,7 +40,8 @@ public class Main {
                   System.err.println(e.getMessage());
                   System.exit(1);
             } catch (FileNotFoundException e) {
-                  System.err.println("Я без понятия, как это произошло, тем более на данном этапе... Но файл не найден, ищите партизанов, затирающих Ваши файлы во время работы программы.");
+                  System.err.println("Я без понятия, как это произошло, тем более на данном этапе... " +
+                  		"Но файл не найден, ищите партизанов, затирающих Ваши файлы во время работы программы.");
                   System.exit(1);
             } catch (IOException e) {
                   System.err.println(e.getMessage());
