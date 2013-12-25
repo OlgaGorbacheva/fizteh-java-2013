@@ -16,7 +16,7 @@ public class DropCommand implements Command {
             this.provider = provider;
       }
 
-      public void execute(String[] args, State state) throws IOException{
+      public void execute(String[] args, State state) throws IOException {
             if (provider.getTable(args[1]) == null) {
                   System.out.println("tablename not exists");
             } else {

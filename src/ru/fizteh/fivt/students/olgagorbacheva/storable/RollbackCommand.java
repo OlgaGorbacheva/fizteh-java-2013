@@ -16,7 +16,7 @@ public class RollbackCommand implements Command {
             this.provider = provider;
       }
 
-      public void execute(String[] args, State state) throws IOException{
+      public void execute(String[] args, State state) throws IOException {
             System.out.println(provider.currentDataBase.rollback());
       }
 

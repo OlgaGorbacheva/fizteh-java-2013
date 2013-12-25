@@ -45,7 +45,8 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
 
       @Override
       public Storeable put(String key, Storeable value) throws ColumnFormatException {
-            if (key == null || value == null || key.toString().trim().equals("") || value.toString().trim().equals("")) {
+            if (key == null || value == null || key.toString().trim().equals("") 
+                        || value.toString().trim().equals("")) {
                   throw new IllegalArgumentException("Неверное значение ключа или значения");
             }
             StorableUtils.equalFormat(value, columnTypes);

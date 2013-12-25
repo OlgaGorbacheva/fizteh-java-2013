@@ -11,7 +11,7 @@ public class RemoveCommand implements Command {
             
       }
       
-      public void execute(String args[], State state) throws ShellException {
+      public void execute(String[] args, State state) throws ShellException {
             File f;
             if (Paths.get(args[1]).isAbsolute()) {
                   f = new File(args[1]);

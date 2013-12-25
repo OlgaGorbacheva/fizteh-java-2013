@@ -68,7 +68,8 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                               throw new IllegalArgumentException("Недопустимые типы колонок: " + clazz.toString());
                         }
                  } else {
-                       throw new IllegalArgumentException("Недопустимые типы колонок: null не может быть типом колонки");
+                       throw new IllegalArgumentException("Недопустимые типы колонок: "
+                       		+ "null не может быть типом колонки");
                  }
             }
             if (tables.get(name) != null) {
