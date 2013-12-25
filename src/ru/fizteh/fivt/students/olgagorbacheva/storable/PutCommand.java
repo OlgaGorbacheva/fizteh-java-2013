@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.fizteh.fivt.storage.structured.ColumnFormatException;
 import ru.fizteh.fivt.storage.structured.Storeable;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Command;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
@@ -24,8 +25,12 @@ public class PutCommand implements Command {
                   throw new IllegalArgumentException("put: Таблица не выбрана");
             }
             List<Object> values = new ArrayList<>();
-            for (int i = 2; i < args.length; i++) {
-                  values.add(StorableTypes.getValueAt(args[i], provider.currentDataBase, i - 2));
+            try {
+                  for (int i = 2; i < args.length; i++) {
+                        values.add(StorableTypes.getValueAt(args[i], provider.currentDataBase, i - 2));
+                  }
+            } catch (ColumnFormatException e) {
+                  System.err.println(e.getLocalizedMessage() + " in put command");
             }
             Storeable line = provider.createFor(provider.currentDataBase, values);
             Storeable value = provider.currentDataBase.put(args[1], line);
@@ -48,4 +53,3 @@ public class PutCommand implements Command {
       }
 
 }
-

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.fizteh.fivt.storage.structured.ColumnFormatException;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Command;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
 
@@ -20,8 +21,12 @@ public class CreateCommand implements Command {
 
       public void execute(String[] args, State state) throws IOException {
             List<Class<?>> types = new ArrayList<>();
-            for (int i = 2; i < args.length; i++) {
-                  types.add(StorableTypes.getClass(args[i]));
+            try {
+                  for (int i = 2; i < args.length; i++) {
+                        types.add(StorableTypes.getClass(args[i]));
+                  }
+            } catch (ColumnFormatException e) {
+                  System.err.println(e.getLocalizedMessage() + " in create command");
             }
             if (provider.createTable(args[1], types) == null) {
                   System.out.println(args[1] + " exists");

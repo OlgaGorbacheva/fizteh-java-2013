@@ -7,7 +7,7 @@ public class StorableTableProviderFactory implements TableProviderFactory{
       
       @Override
       public StorableTableProvider create(String dir) throws IllegalArgumentException {
-            if (dir == null || dir.isEmpty()) {
+            if (dir == null || dir.trim().equals("") || dir.isEmpty()) {
                   throw new IllegalArgumentException("Недопустимое имя хранилища базы данных");
             }
             File directory = new File(dir);
