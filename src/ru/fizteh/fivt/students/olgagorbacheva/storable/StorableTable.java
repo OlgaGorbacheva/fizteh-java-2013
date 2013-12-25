@@ -49,7 +49,10 @@ public class StorableTable extends AbstractTable<String, Storeable> implements T
                         || value.toString().trim().equals("")) {
                   throw new IllegalArgumentException("Неверное значение ключа или значения");
             }
-            StorableUtils.equalFormat(value, columnTypes, this);
+            if (key.split("\\s+").length != 0) {
+                  throw new IllegalArgumentException("неподходящий ключ");
+            }
+            StorableUtils.equalFormat(value, columnTypes);
             if (dataStorage.get(key) == null && newKeys.get(key) == null || removedKeys.get(key) != null) {
                   if (removedKeys.get(key) != null) {
                         if (removedKeys.get(key) != value) {

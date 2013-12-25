@@ -41,16 +41,23 @@ public class StorableUtils {
             }
       }
 
-      public static void equalFormat(Storeable struct, List<Class<?>> list, StorableTable table)
-                  throws ColumnFormatException, IndexOutOfBoundsException{
-            if (list.size() != table.getColumnsCount()) {
-                  throw new ColumnFormatException("количество колонок таблицы и строки значений не совпадают");
-            }
-            for (int i = 0; i < list.size(); i++) {
-                  if (struct.getColumnAt(i) != null) {
-                        typeCheck(list.get(i), struct.getColumnAt(i).getClass());
+      public static void equalFormat(Storeable struct, List<Class<?>> list) throws ColumnFormatException {
+            int i = 0;
+            for (; i < list.size(); i++) {
+                  try {
+                        if (struct.getColumnAt(i) != null) {
+                              typeCheck(list.get(i), struct.getColumnAt(i).getClass());
+                        }
+                  } catch (IndexOutOfBoundsException e) {
+                        throw new ColumnFormatException("Несовпадение типов столбца");
                   }
             }
+            try {
+                  struct.getColumnAt(i); 
+            } catch (IndexOutOfBoundsException e) {
+                  return;
+            }
+            throw new ColumnFormatException("Несовпадение типов столбца");
       }
 
       public static String writeToString(Table table, Storeable value) throws XMLStreamException, IOException,
