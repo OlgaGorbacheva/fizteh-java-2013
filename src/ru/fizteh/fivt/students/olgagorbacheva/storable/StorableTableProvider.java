@@ -58,19 +58,18 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
                   throw new RuntimeException("Недопустимое имя таблицы");
             }
             if (columnTypes == null) {
-                  throw new IllegalArgumentException("Список типов пуст");
+                  throw new IllegalArgumentException("wrong type (null type list)");
             }
             if (columnTypes.size() == 0) {
-                  throw new IllegalArgumentException("Список типов пуст");
+                  throw new IllegalArgumentException("wrong type (empty type list)");
             }
             for (Class<?> clazz : columnTypes) {
                  if (clazz != null) {
                         if (!StorableTypes.check(clazz)) {
-                              throw new IllegalArgumentException("Недопустимые типы колонок: " + clazz.toString());
+                              throw new IllegalArgumentException("wrong type (" + clazz.toString() + ")");
                         }
                  } else {
-                       throw new IllegalArgumentException("Недопустимые типы колонок: "
-                                   + "null не может быть типом колонки");
+                       throw new IllegalArgumentException("wrong type (null)");
                  }
             }
             if (tables.get(name) != null) {

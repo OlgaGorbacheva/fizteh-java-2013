@@ -1,10 +1,8 @@
 package ru.fizteh.fivt.students.olgagorbacheva.storable;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
 
-import ru.fizteh.fivt.storage.structured.ColumnFormatException;
 import ru.fizteh.fivt.storage.structured.Storeable;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.Command;
 import ru.fizteh.fivt.students.olgagorbacheva.shell.State;
@@ -24,23 +22,20 @@ public class PutCommand implements Command {
             if (provider.currentDataBase == null) {
                   throw new IllegalArgumentException("put: Таблица не выбрана");
             }
-            List<Object> values = new ArrayList<>();
             try {
-                  for (int i = 2; i < args.length; i++) {
-                        values.add(StorableTypes.getValueAt(args[i], provider.currentDataBase, i - 2));
+                  Storeable line = provider.deserialize(provider.currentDataBase, args[2]);
+                  Storeable value = provider.currentDataBase.put(args[1], line);
+                  if (value == null) {
+                        System.out.println("new");
+                  } else {
+                        System.out.println("overwrite");
+                        for (int i = 0; i < provider.currentDataBase.getColumnsCount(); i++) {
+                              System.out.print(value.getColumnAt(i).toString() + " ");
+                        }
                   }
-            } catch (ColumnFormatException e) {
-                  System.err.println(e.getLocalizedMessage() + " in put command");
-            }
-            Storeable line = provider.createFor(provider.currentDataBase, values);
-            Storeable value = provider.currentDataBase.put(args[1], line);
-            if (value == null) {
-                  System.out.println("new");
-            } else {
-                  System.out.println("overwrite");
-                  for (int i = 0; i < provider.currentDataBase.getColumnsCount(); i++) {
-                        System.out.print(value.getColumnAt(i).toString() + " ");
-                  }
+            } catch (ParseException e) {
+                  System.out.println(e.getLocalizedMessage());
+                  
             }
       }
 

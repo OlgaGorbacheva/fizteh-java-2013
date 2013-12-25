@@ -25,14 +25,8 @@ public class GetCommand implements Command {
             if (value == null) {
                   System.out.println("not found");
             } else {
-                  System.out.println("found" + "\n");
-                  for (int i = 0; i < provider.currentDataBase.getColumnsCount(); i++) {
-                        if (value.getColumnAt(i) == null) {
-                              System.out.print("null ");
-                        } else {
-                              System.out.print(value.getColumnAt(i).toString() + " ");
-                        }
-                  }
+                  System.out.println("found");
+                  System.out.println(provider.serialize(provider.currentDataBase, value));
             }
       }
 
