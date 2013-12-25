@@ -35,8 +35,8 @@ public class StorableUtils {
 
       static final String SIGNATURE_FILE_NAME = "signature.tsv";
 
-      private static void typeCheck(Class<?> value1, Class<?> value2) throws ColumnFormatException {
-            if (!value1.equals(value1)) {
+      public static void typeCheck(Class<?> value1, Class<?> value2) throws ColumnFormatException {
+            if (!value1.equals(value2)) {
                   throw new ColumnFormatException("Несовпадение типов столбца");
             }
       }
