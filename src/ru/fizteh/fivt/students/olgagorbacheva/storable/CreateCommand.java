@@ -21,9 +21,17 @@ public class CreateCommand implements Command {
 
       public void execute(String[] args, State state) throws IOException {
             List<Class<?>> types = new ArrayList<>();
+            StringBuilder typeString = new StringBuilder(join(args, " ", 2).trim());
+            if (typeString.charAt(0) == '(' && typeString.charAt(typeString.length() - 1) == ')') {
+                  typeString.deleteCharAt(0);
+                  typeString.deleteCharAt(typeString.length() - 1);
+            } else {
+                  throw new IOException("Неверный формат ввода");
+            }
+            String[] typeList = typeString.toString().split("\\s+");
             try {
-                  for (int i = 2; i < args.length; i++) {
-                        types.add(StorableTypes.getClass(args[i]));
+                  for (int i = 0; i < typeList.length; i++) {
+                        types.add(StorableTypes.getClass(typeList[i]));
                   }
             } catch (ColumnFormatException e) {
                   System.err.println(e.getLocalizedMessage() + " in create command");
@@ -41,5 +49,20 @@ public class CreateCommand implements Command {
 
       public int getArgNumber() {
             return argNumber;
+      }
+
+      public static String join(String[] objects, String separator, int begin) {
+
+            StringBuilder argument = new StringBuilder();
+            boolean first = true;
+            for (int i = begin; i < objects.length; i++) {
+                  if (!first) {
+                        argument.append(separator);
+                  } else {
+                        first = false;
+                  }
+                  argument.append(objects[i]);
+            }
+            return argument.toString();
       }
 }
