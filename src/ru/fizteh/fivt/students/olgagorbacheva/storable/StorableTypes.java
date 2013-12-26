@@ -109,7 +109,7 @@ public enum StorableTypes {
             }
             StorableTypes type = nameToTypes.get(name);
             if (type == null) {
-                  throw new ColumnFormatException("wrong type " + name);
+                  throw new ColumnFormatException("wrong type (" + name + " is not a type)");
             }
             return type.clazz;
       }
@@ -120,7 +120,7 @@ public enum StorableTypes {
             }
             StorableTypes type = classToTypes.get(clazz);
             if (type == null) {
-                  throw new ColumnFormatException("wrong type " + clazz.toString());
+                  throw new ColumnFormatException("wrong type (" + clazz.toString() + " is not a type)");
             }
             return type.name;
       }
@@ -129,7 +129,7 @@ public enum StorableTypes {
                   IndexOutOfBoundsException {
             StorableTypes type = classToTypes.get(value.getColumnAt(index).getClass());
             if (type == null) {
-                  throw new ColumnFormatException("wrong type " + value.getColumnAt(index));
+                  throw new ColumnFormatException("wrong type (" + value.getColumnAt(index) + " is not a type)");
             }
             return type.get(value, index).toString();
       }
@@ -138,8 +138,8 @@ public enum StorableTypes {
                   IndexOutOfBoundsException {
             StorableTypes type = classToTypes.get(table.getColumnType(index));
             if (type == null) {
-                  throw new ColumnFormatException("wrong type "
-                                    + table.getColumnType(index).toString());
+                  throw new ColumnFormatException("wrong type ("
+                                    + table.getColumnType(index).toString() + " is not a type)");
             }
             if (value.equals("null")) {
                   return null;

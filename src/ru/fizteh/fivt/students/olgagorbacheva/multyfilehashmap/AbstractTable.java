@@ -14,6 +14,7 @@ public abstract class AbstractTable<KeyType, ValueType> {
       protected Storage<KeyType, ValueType> dataStorage;
       protected Storage<KeyType, ValueType> newKeys;
       protected Storage<KeyType, ValueType> removedKeys;
+
       protected File dataBaseDir;
 
       public Storage<KeyType, ValueType> getStorage() {
@@ -54,8 +55,7 @@ public abstract class AbstractTable<KeyType, ValueType> {
       }
 
       public ValueType put(KeyType key, ValueType value) {
-            if (key == null || value == null || key.toString().trim().equals("") 
-                        || value.toString().trim().equals("")) {
+            if (key == null || value == null || key.toString().trim().equals("") || value.toString().trim().equals("")) {
                   throw new IllegalArgumentException("Неверное значение ключа или значения");
             }
             if (dataStorage.get(key) == null && newKeys.get(key) == null || removedKeys.get(key) != null) {

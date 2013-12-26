@@ -26,15 +26,21 @@ public class CreateCommand implements Command {
                   typeString.deleteCharAt(0);
                   typeString.deleteCharAt(typeString.length() - 1);
             } else {
-                  throw new IOException("Неверный формат ввода");
+                  throw new IOException("wrong type (wrong input format)");
             }
             String[] typeList = typeString.toString().split("\\s+");
+            if (typeList == null) {
+                  throw new IllegalArgumentException("wrong type (null type list)");
+            }
+            if (typeList.length == 0) {
+                  throw new IllegalArgumentException("wrong type (empty type list)");
+            }
             try {
                   for (int i = 0; i < typeList.length; i++) {
                         types.add(StorableTypes.getClass(typeList[i]));
                   }
             } catch (ColumnFormatException e) {
-                  System.err.println(e.getLocalizedMessage() + " in create command");
+                  throw new IllegalArgumentException (e.getLocalizedMessage());
             }
             if (provider.createTable(args[1], types) == null) {
                   System.out.println(args[1] + " exists");
