@@ -57,6 +57,9 @@ public class StorableTableProvider extends AbstractTableProvider<StorableTable> 
             if (!name.matches(TABLE_NAME)) {
                   throw new RuntimeException("Недопустимое имя таблицы");
             }
+            if (columnTypes == null || columnTypes.size() == 0) {
+                  throw new IllegalArgumentException("Список типов пуст");
+            }
             for (Class<?> clazz : columnTypes) {
                  if (clazz != null) {
                         if (!StorableTypes.check(clazz)) {
