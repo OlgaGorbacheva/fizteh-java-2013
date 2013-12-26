@@ -17,7 +17,7 @@ public class StorableTableProviderFactory implements TableProviderFactory{
 //                  throw new IOException("Директории с данным именем не существует");
 //            }
             if (!directory.isDirectory()) {
-                  throw new IllegalArgumentException("Файл с данным именем не является директорией");
+                  throw new IOException("Файл с данным именем не является директорией");
             }
             if (!directory.canRead() || !directory.canWrite()) {
                   throw new RuntimeException("Директория недоступна");
