@@ -22,6 +22,9 @@ public class CreateCommand implements Command {
       public void execute(String[] args, State state) throws IOException {
             List<Class<?>> types = new ArrayList<>();
             StringBuilder typeString = new StringBuilder(join(args, " ", 2).trim());
+            if (args.length <= 2) {
+                  throw new IllegalArgumentException("wrong type (empty type list)");
+            }
             if (typeString.charAt(0) == '(' && typeString.charAt(typeString.length() - 1) == ')') {
                   typeString.deleteCharAt(0);
                   typeString.deleteCharAt(typeString.length() - 1);

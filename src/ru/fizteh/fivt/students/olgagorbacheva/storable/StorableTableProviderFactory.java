@@ -12,11 +12,12 @@ public class StorableTableProviderFactory implements TableProviderFactory {
             if (dir == null || dir.trim().equals("") || dir.isEmpty()) {
                   throw new IllegalArgumentException("Недопустимое имя хранилища базы данных");
             }
+//            System.err.println(dir);
             File directory = new File(dir);
+            if (!directory.exists()) {
+                  throw new IOException("Директории с данным именем не существует\n" + dir);
+            }
             if (!directory.isDirectory()) {
-                  if (!directory.exists()) {
-                        throw new IOException("Директории с данным именем не существует");
-                  }
                   throw new IllegalArgumentException("Файл с данным именем не является директорией");
             }
             if (!directory.canRead() || !directory.canWrite()) {
