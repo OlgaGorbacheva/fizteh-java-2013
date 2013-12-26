@@ -13,9 +13,9 @@ public class StorableTableProviderFactory implements TableProviderFactory{
                   throw new IllegalArgumentException("Недопустимое имя хранилища базы данных");
             }
             File directory = new File(dir);
-            if (!directory.exists()) {
-                  throw new IOException("Директории с данным именем не существует");
-            }
+//            if (!directory.exists()) {
+//                  throw new IOException("Директории с данным именем не существует");
+//            }
             if (!directory.isDirectory()) {
                   throw new IllegalArgumentException("Файл с данным именем не является директорией");
             }
